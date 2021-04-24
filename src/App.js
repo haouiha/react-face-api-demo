@@ -5,7 +5,7 @@ const MODEL_URL = '/models';
 
 const App = () => {
 	const videoRef = useRef();
-	const canvasRef = useRef(null);
+	const canvasRef = useRef();
 
 	useEffect(() => {
 		const loading = async () => {
@@ -35,7 +35,6 @@ const App = () => {
 	};
 
 	useEffect(() => {
-		let videoInstance = videoRef.current;
 		if (videoRef.current && canvasRef.current) {
 			videoRef.current.addEventListener('play', () => {
 				const displaySize = { width: videoRef.current.width, height: videoRef.current.height };
@@ -43,10 +42,10 @@ const App = () => {
 				let i = 0;
 				setInterval(async () => {
 					//https://github.com/justadudewhohacks/face-api.js#models
-					// new faceapi.SsdMobilenetv1Options({ minConfidence: 0.65 })
+					//new faceapi.SsdMobilenetv1Options({ minConfidence: 0.65 })
 					//new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.7 })
 					const detections = await faceapi
-						.detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.45 }))
+						.detectAllFaces(videoRef.current, new faceapi.SsdMobilenetv1Options({ minConfidence: 0.65 }))
 						.withFaceLandmarks()
 						.withFaceExpressions()
 						.withAgeAndGender()
@@ -60,8 +59,8 @@ const App = () => {
 						.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
 					faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
-					faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
-					faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections);
+					// faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
+					// faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections);
 
 					resizedDetections.forEach((result) => {
 						const { age, gender, genderProbability } = result;
@@ -75,9 +74,6 @@ const App = () => {
 				}, 100);
 			});
 		}
-		return () => {
-			videoInstance && videoInstance.removeEventListener('play', null);
-		};
 	}, []);
 
 	return (
