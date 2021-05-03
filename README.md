@@ -18,7 +18,7 @@
 #### `Run development with nodemon`
     npm run dev
 
-    https://documenter.getpostman.com/view/6623305/TzRNEUpm 
+document : https://documenter.getpostman.com/view/6623305/TzRNEUpm 
 
 ## Client Getting Started
 
